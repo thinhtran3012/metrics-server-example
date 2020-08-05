@@ -1,0 +1,80 @@
+ngx_addon_name=ngx_http_vhost_traffic_status_module
+have=NGX_STAT_STUB . auto/have
+
+HTTP_VTS_SRCS=" \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_module.c               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_variables.c            \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_string.c               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_shm.c                  \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_node.c                 \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_filter.c               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_control.c              \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_limit.c                \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display.c              \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display_json.c         \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display_prometheus.c   \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_set.c                  \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_dump.c                 \
+                $ngx_addon_dir/collector/ngx_metric_collect_mem_info.c                  \
+                $ngx_addon_dir/collector/ngx_metric_collect_disk_stats.c                \
+                $ngx_addon_dir/collector/ngx_metric_collect_net_stats.c                 \
+                $ngx_addon_dir/collector/ngx_metric_collect_cpu_stats.c                 \
+                $ngx_addon_dir/collector/ngx_metric_collect_vm_stats.c                  \
+                $ngx_addon_dir/collector/ngx_metric_collect_uname_info.c                \
+                $ngx_addon_dir/collector/ngx_metric_collect_loadavg_stats.c             \
+                $ngx_addon_dir/collector/ngx_metric_collect_netdev_stats.c              \
+                $ngx_addon_dir/collector/ngx_metric_collect_disk_utilization_info.c     \
+                $ngx_addon_dir/collector/ngx_metric_collect_rtmp_stats.c                \
+                $ngx_addon_dir/collector/ngx_metric_collect_live_session_stats.c        \
+                $ngx_addon_dir/collector/ngx_rtmp.c                                     \
+                $ngx_addon_dir/collector/ngx_util.c                                     \
+                "
+
+HTTP_VTS_DEPS=" \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_module.h               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_variables.h            \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_string.h               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_shm.h                  \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_node.h                 \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_filter.h               \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_control.h              \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_limit.h                \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display.h              \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display_json.h         \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_display_prometheus.h   \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_set.h                  \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_dump.h                 \
+                $ngx_addon_dir/src/ngx_http_vhost_traffic_status_module_html.h          \
+				$ngx_addon_dir/collector/ngx_metric_collect_mem_info.h                  \
+				$ngx_addon_dir/collector/ngx_metric_collect_disk_stats.h                \
+				$ngx_addon_dir/collector/ngx_metric_collect_net_stats.h                 \
+				$ngx_addon_dir/collector/ngx_metric_collect_cpu_stats.h                 \
+				$ngx_addon_dir/collector/ngx_metric_collect_vm_stats.h                  \
+				$ngx_addon_dir/collector/ngx_metric_collect_uname_info.h                \
+				$ngx_addon_dir/collector/ngx_metric_collect_loadavg_stats.h             \
+				$ngx_addon_dir/collector/ngx_metric_collect_netdev_stats.h              \
+                $ngx_addon_dir/collector/ngx_metric_collect_disk_utilization_info.h     \
+				$ngx_addon_dir/collector/ngx_metric_collect_rtmp_stats.h                \
+                $ngx_addon_dir/collector/ngx_metric_collect_live_session_stats.h        \
+				$ngx_addon_dir/collector/ngx_rtmp.h                                     \
+				$ngx_addon_dir/collector/ngx_util.h                                     \
+				$ngx_addon_dir/collector/global.h                                       \
+                "
+if test -n "$ngx_module_link"; then
+    ngx_module_type=HTTP
+    ngx_module_name=$ngx_addon_name
+    ngx_module_incs="/usr/include/libxml2"
+    ngx_module_srcs="$HTTP_VTS_SRCS"
+    ngx_module_libs="-lcurl -lxml2"
+    ngx_module_deps="$HTTP_VTS_DEPS"
+
+    . auto/module
+else
+    HTTP_MODULES="$HTTP_MODULES $ngx_addon_name"
+    NGX_ADDON_SRCS="$NGX_ADDON_SRCS $HTTP_VTS_SRCS"
+    NGX_ADDON_DEPS="$NGX_ADDON_DEPS $HTTP_VTS_DEPS"
+    ngx_module_incs="/usr/include/libxml2"
+	ngx_module_libs="-lcurl -lxml2"
+fi
+
+# vi:set ft=sh ts=4 sw=4 et fdm=marker:
